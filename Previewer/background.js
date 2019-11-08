@@ -205,17 +205,26 @@ var xssCheck = (tab, port) => {
   }, (result) => {
 		if(result) {
      		$.ajax({
-      		type: "POST",
-      		url: "http://52.79.152.29/post/chrome/xssCheck",
-      		data: result[0],
-      		success: (data) => {
-						chrome.storage.local.set({"data4":data['xssFlag']});
-						if(port == null && data['xssFlag']){
+      		type: "GET",
+      		url: "http://52.79.152.29/get/chrome/xssGet",
+      		success: (xssData) => {
+						console.log(xssData);
+						let flag = false;
+
+						for(let data of xssData) {
+							let match = result[0].indexOf(data['gadget'])
+							if(match != -1) {
+								flag = true;
+								break;
+							}
+						}
+						chrome.storage.local.set({"data4":flag});
+						if(port == null && flag){
 							chrome.storage.local.set({"iconChange":true})
 							setIcon("danger",tab.id)
 						}
 						else if (port != null){
-							chrome.storage.local.set({"xssFlag":data['xssFlag']})
+							chrome.storage.local.set({"xssFlag":flag})
 						}
       	},
       	error: (error) => {

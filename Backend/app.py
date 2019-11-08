@@ -118,7 +118,7 @@ def chrome_user_site_request():
     return jsonify({"message": "사이트를 전달하였습니다."})
 
 
-@app.route("/post/chrome/xssCheck", methods=["POST"])
+@app.route("/post/chrome/xssGet", methods=["GET"])
 def chrome_xss_check():
 
     page_data = request.get_data().decode("UTF-8")
@@ -129,14 +129,7 @@ def chrome_xss_check():
 
     result = cursor.fetchall()
 
-    xss_flag = False
-
-    for xss in result:
-        if xss["gadget"] in page_data:
-            xss_flag = True
-            break
-
-    return jsonify({"xssFlag": xss_flag})
+    return result
 
 
 @app.route("/post/chrome/phishingCheck", methods=["POST"])
@@ -189,6 +182,8 @@ def hsts_check():
         site_data["sslfail"] = str(e)
     except socket.gaierror as e:
         site_data["sslfail"] = "인증서를 사용하지 않는 사이트입니다."
+    except Exception as e:
+        print(e)
 
     # HSTS check
     try:
@@ -606,4 +601,4 @@ def add_pay():
     return jsonify()
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", port=80)
