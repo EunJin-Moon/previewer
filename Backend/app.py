@@ -129,7 +129,7 @@ def chrome_xss_check():
 
     result = cursor.fetchall()
 
-    return result
+    return jsonify(result)
 
 
 @app.route("/post/chrome/phishingCheck", methods=["POST"])
@@ -527,9 +527,9 @@ def post_pay():
         'total_amount': amount,
         'vat_amount': 0,
         'tax_free_amount': 0,
-        'approval_url': 'http://52.79.152.29:5000/payComplete',
-        'fail_url': 'http://52.79.152.29:5000/',
-        'cancel_url': 'http://52.79.152.29:5000/',
+        'approval_url': 'http://52.79.152.29/payComplete',
+        'fail_url': 'http://52.79.152.29/',
+        'cancel_url': 'http://52.79.152.29/',
     }
     response = requests.post(url + "/v1/payment/ready", params=params, headers=headers)
     result=response.json()

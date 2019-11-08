@@ -22,7 +22,7 @@ chrome.tabs.onUpdated.addListener((currentTabId, changeInfo, tab) => {
 chrome.webRequest.onBeforeRequest.addListener((requestData) => {
 	// Request method check
 	let grade = sessionStorage.getItem("grade");
-	if(grade === "premium") {
+	if(grade === "premium" || grade === "pro") {
 		let urlBeforeConnect = requestData.url.replace("http://", "").replace("https://", "")
 		for(data of phishingSite) {
 			if(urlBeforeConnect == data.url || urlBeforeConnect == data.url+"/") {
@@ -37,7 +37,7 @@ chrome.webRequest.onBeforeRequest.addListener((requestData) => {
 	if(requestData.method == "POST")
 	{
 		let checkPasswordFlag = checkPassword(requestData, grade, requestData.tabId);
-		if(grade === "premium" && checkPasswordFlag) {
+		if((grade === "pro" || grade === "premium") && checkPasswordFlag) {
 			let confirmflag = confirm("로그인 데이터가 평문으로 전송되고 있습니다. 로그인하시겠습니까?");
 			if(!confirmflag) {
 				return {cancel: true}
@@ -208,7 +208,6 @@ var xssCheck = (tab, port) => {
       		type: "GET",
       		url: "http://52.79.152.29/get/chrome/xssGet",
       		success: (xssData) => {
-						console.log(xssData);
 						let flag = false;
 
 						for(let data of xssData) {
