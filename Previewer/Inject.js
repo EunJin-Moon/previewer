@@ -73,7 +73,7 @@
   var iconDanger = "<img src='./Icons/64_danger.png' />"
 
   // Get Data
-  portGetData.onMessage.addListener(([data1, data2, data3, data4, data5]) => {
+  portGetData.onMessage.addListener(([data1, data2, data3, data4, data5, score, warnFlag]) => {
     let dataTransferCheck = data1;
     let httpStatus = data2;
     let hstsData = data3['hsts'];
@@ -120,6 +120,24 @@
       document.getElementById("phishingContent").setAttribute("data-tooltip-text", "피싱 사이트 아닙니다.");
     }
 
+    if(warnFlag) {
+      document.querySelector("#securePercent").innerHTML="0%";
+      document.querySelector("#secureResult").innerHTML = "위험한 사이트입니다!"
+      document.getElementById("secureCircle").setAttribute("class","c100 center red p100");
+    } else {
+      document.querySelector("#securePercent").innerHTML=score+"%";
+      if(score >= 90) {
+        document.querySelector("#secureResult").innerHTML = "안전한 사이트입니다."
+        document.getElementById("secureCircle").setAttribute("class","c100 center green p"+score);}
+      else if(score > 70 && score < 90) {
+        document.querySelector("#secureResult").innerHTML = "사이트 이용에 주의하세요!"
+        document.getElementById("secureCircle").setAttribute("class","c100 center orange p"+score);
+      }
+      else {
+        document.querySelector("#secureResult").innerHTML = "위험한 사이트입니다!"
+        document.getElementById("secureCircle").setAttribute("class","c100 center red p"+score);
+      }
+    }
   });
 
   // Go to Our page

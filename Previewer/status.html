@@ -3,6 +3,7 @@
 	<head>
 		<meta charset="UTF-8">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+		<link rel="stylesheet" href="css/circle.css">
 	</head>
 	<body>
     <img src="./Icons/logo.png" class="img-fluid mx-auto d-block my-3" id="gotopage" alt="Previewer logo">
@@ -22,6 +23,15 @@
         <input class="btn btn-primary" id="login" type="button"  value="로그인" />
       </form>
 		</div>
+
+		<div class="c100 center p100" id="secureCircle">
+		  <span id="securePercent">Loading...</span>
+			<div class="bar"></div>
+    	<div class="fill"></div>
+	</div>
+		<p class="text-center"> 사이트 안전도 </p>
+
+		<p class="text-center" id="secureResult"></p>
 
 		<div class="mb-3" id="secureTable"></div>
 

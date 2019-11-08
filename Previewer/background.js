@@ -117,7 +117,6 @@ var checkSite = async (tab) => {
 
 	// hsts & https
  	await getsiteData(tab, null);
-
  	// Phishing
  	await phishingCheck(tab, null);
  	// XSS
@@ -188,7 +187,27 @@ var getsiteData = async (tab, port) => {
 				chrome.storage.local.get(['xssFlag', 'phishingFlag'], (res) => {
 					let xssFlag = res.xssFlag;
 					let phishingFlag = res.phishingFlag;
-					port.postMessage([dataTransferCheck[tab.id], urlStatus, data, xssFlag, phishingFlag]);
+					let score = 100;
+					let warnFlag = false;
+					if(dataTransferCheck[tab.id]) {
+						score -= 11;
+					}
+					if(urlStatus == "http") {
+						score -= 10;
+					}
+					if(!data['hsts']) {
+						score -= 10;
+					}
+					if(xssFlag) {
+						score -=30;
+						warnFlag = true;
+					}
+					if(phishingFlag) {
+						score -=30;
+						warnFlag = true;
+					}
+
+					port.postMessage([dataTransferCheck[tab.id], urlStatus, data, xssFlag, phishingFlag, score, warnFlag]);
 					chrome.storage.local.remove(['xssFlag','phishingFlag']);
 				});
 			}
@@ -209,10 +228,9 @@ var xssCheck = (tab, port) => {
       		url: "http://52.79.152.29/get/chrome/xssGet",
       		success: (xssData) => {
 						let flag = false;
-
 						for(let data of xssData) {
 							let match = result[0].indexOf(data['gadget'])
-							if(match != -1) {
+							if(match != -1 && data['gadget']) {
 								flag = true;
 								break;
 							}
