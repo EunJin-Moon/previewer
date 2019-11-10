@@ -64,7 +64,7 @@ export default {
           ex1:"탐지가능",
           step2: "block.png",
           ex2:"차단가능",
-          step3: "alarm.png",
+          step3: "noalarm.png",
           ex3:"알람가능"
         },
         {
